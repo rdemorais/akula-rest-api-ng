@@ -1,0 +1,17 @@
+{
+  "name": "akula-rest-api-ng",
+  "main": "akula-rest-api-ng.js",
+  "homepage": "https://github.com/rdemorais/akula-rest-api-ng",
+  "authors": [
+    "Rafael de Morais <rdemorais.freitas@gmail.com>"
+  ],
+  "description": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

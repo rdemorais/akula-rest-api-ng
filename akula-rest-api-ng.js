@@ -33,6 +33,14 @@ angular.module('akulaRestApiService', ['ngResource'])
             env: {
                 get: function() {return config.env},
                 set: function(value) {config.env = value}
+            },
+            envDev: {
+                get: function() {return config.servers.dev},
+                set: function(value) {config.servers.dev = value}
+            },
+            envProd: {
+                get: function() {return config.servers.prod},
+                set: function(value) {config.servers.prod = value}
             }
         });
 

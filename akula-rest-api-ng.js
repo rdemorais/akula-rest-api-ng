@@ -4,15 +4,22 @@ angular.module('akulaRestApiService', ['ngResource'])
         env: 'dev',
         endPoins: {
             //urls de interação com o server vão aqui'
-            listaEstados: '/federacao/estados'
+            listaEstados: '/federacao/estados',
+            listaMunicipios: '/federacao/estados/:uf/municipios',
+            listaBancos: '/bancos',
+            listaBancosByCod: '/bancos/codigo/:cod',
+            listaBancosByNome: '/bancos/nome/:nome',
+            listaFipeMarcas: '/fipe/:tipoVeiculo/marcas',
+            listaFipeModelos: '/fipe/:tipoVeiculo/marcas/:codigoMarca/modelos',
+            listaFipeAnos: '/fipe/:tipoVeiculo/marcas/:codigoMarca/modelos/:codigoModelo/anos'
         },
         servers: {
             dev: {
-                baseUrl: 'http://restapi-akkula.rhcloud.com',
+                baseUrl: 'http://localhost',
                 baseApi: '/api/v1'
             },
             prod: {
-                baseUrl: 'http://192.168.0.24:3001',
+                baseUrl: 'http://localhost',
                 baseApi: '/api/v1'
             }
         }
@@ -42,6 +49,10 @@ angular.module('akulaRestApiService', ['ngResource'])
                 return akService.listaEstados();
             }
 
+            akServ.listaMunicipios = function(_uf) {
+                return akService.listaMunicipios(_uf);
+            }
+
             return akServ;
         }
         this.$get.$inject = ['akService'];
@@ -51,10 +62,93 @@ angular.module('akulaRestApiService', ['ngResource'])
     function akService($http, $q, config, $resource) {
         var akS = {};
         var envOpts = config.servers[config.env];
-	    var federacaoEstadosApi = $resource(envOpts.baseUrl + envOpts.baseApi + config.endPoins.listaEstados);
+	    var federacaoEstadosApi = $resource(
+                envOpts.baseUrl + 
+                envOpts.baseApi + 
+                config.endPoins.listaEstados);
+
+        var federacaoMunicipiosApi = $resource(
+                envOpts.baseUrl + 
+                envOpts.baseApi + 
+                config.endPoins.listaMunicipios, 
+                    {'uf': ''}
+        );
+
+        var bancosApi = $resource(
+                envOpts.baseUrl + 
+                envOpts.baseApi + 
+                config.endPoins.listaBancos
+        );
+
+        var bancosByCodApi = $resource(
+                envOpts.baseUrl + 
+                envOpts.baseApi + 
+                config.endPoins.listaBancosByCod,
+                   {'cod': ''} 
+        );
+
+        var bancosByNomeApi = $resource(
+                envOpts.baseUrl + 
+                envOpts.baseApi + 
+                config.endPoins.listaBancosByNome,
+                   {'nome': ''} 
+        );
+
+        var listaFipeMarcasApi = $resource(
+                envOpts.baseUrl + 
+                envOpts.baseApi + 
+                config.endPoins.listaFipeMarcas,
+                   {'tipoVeiculo': ''} 
+        );
+
+        var listaFipeModelosApi = $resource(
+                envOpts.baseUrl + 
+                envOpts.baseApi + 
+                config.endPoins.listaFipeModelos,
+                   {'tipoVeiculo': '', 'codigoMarca': ''} 
+        );
+
+        var listaFipeAnosApi = $resource(
+                envOpts.baseUrl + 
+                envOpts.baseApi + 
+                config.endPoins.listaFipeAnos,
+                   {'tipoVeiculo': '', 'codigoMarca': '', 'codigoModelo': ''} 
+        );
 
         akS.listaEstados = function() {
 	  		return federacaoEstadosApi.query().$promise;
+	    };
+
+        akS.listaMunicipios = function(_uf) {
+	  		return federacaoMunicipiosApi.query({uf: _uf}).$promise;
+	    };
+
+        akS.listaBancos = function() {
+	  		return bancosApi.query().$promise;
+	    };
+
+        akS.listaBancosByCod = function(_cod) {
+	  		return bancosByCodApi.query({cod: _cod}).$promise;
+	    };
+
+        akS.listaBancosByNome = function(_nome) {
+	  		return bancosByNomeApi.query({nome: _nome}).$promise;
+	    };
+
+        akS.listaFipeMarcas = function(_tipoVeiculo) {
+	  		return listaFipeMarcasApi.query({tipoVeiculo: _tipoVeiculo}).$promise;
+	    };
+
+        akS.listaFipeModelos = function(_tipoVeiculo, _codigoMarca) {
+	  		return listaFipeModelosApi.query(
+                  {tipoVeiculo: _tipoVeiculo, codigoMarca: _codigoMarca})
+                  .$promise;
+	    };
+
+        akS.listaFipeAnos = function(_tipoVeiculo, _codigoMarca, _codigoModelo) {
+	  		return listaFipeAnosApi.query(
+                  {tipoVeiculo: _tipoVeiculo, codigoMarca: _codigoMarca, codigoModelo: _codigoModelo})
+                  .$promise;
 	    };
 
         return akS;

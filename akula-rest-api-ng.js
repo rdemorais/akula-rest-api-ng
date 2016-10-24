@@ -61,6 +61,30 @@ angular.module('akulaRestApiService', ['ngResource'])
                 return akService.listaMunicipios(_uf);
             }
 
+            akServ.listaBancos = function() {
+                return akService.listaBancos();
+            }
+
+            akServ.listaBancosByCod = function(cod) {
+                return akService.listaBancosByCod(cod);
+            }
+
+            akServ.listaBancosByNome = function(nome) {
+                return akService.listaBancosByNome(nome);
+            }
+
+            akServ.listaFipeMarcas = function(tipoVeiculo) {
+                return akService.listaFipeMarcas(tipoVeiculo);
+            }
+
+            akServ.listaFipeModelos = function(tipoVeiculo, codigoMarca) {
+                return akService.listaFipeModelos(tipoVeiculo, codigoMarca);
+            }
+
+            akServ.listaFipeAnos = function(tipoVeiculo, codigoMarca, codigoModelo) {
+                return akService.listaFipeAnos(tipoVeiculo, codigoMarca, codigoModelo);
+            }
+
             return akServ;
         }
         this.$get.$inject = ['akService'];
